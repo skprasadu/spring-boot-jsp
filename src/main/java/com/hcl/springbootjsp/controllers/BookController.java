@@ -6,46 +6,49 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/book")
 public class BookController {
+	private List<BookData> initData = new ArrayList<>();
 
     /*private final BookService bookService;
 
     public BookController(BookService bookService) {
         this.bookService = bookService;
-    }
-
-    @GetMapping("/viewBooks")
-    public String viewBooks(Model model) {
-        model.addAttribute("books", bookService.getBooks());
-        return "view-books";
-    }
+    }*/
+	
+	public BookController() {
+	    initData.add( new BookData("ISBN-1", "Book 1", "Book 1 Author"));
+	    initData.add(new BookData("ISBN-2", "Book 2", "Book 2 Author"));
+	    initData.add(new BookData("ISBN-3", "Book 3", "Book 3 Author"));	
+	}
 
     @GetMapping("/addBook")
     public String addBookView(Model model) {
-        model.addAttribute("book", new Book());
+        model.addAttribute("book", new BookData());
         return "add-book";
     }
 
     @PostMapping("/addBook")
-    public RedirectView addBook(@ModelAttribute("book") Book book, RedirectAttributes redirectAttributes) {
+    public RedirectView addBook(@ModelAttribute("book") BookData book, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("/book/addBook", true);
-        Book savedBook = bookService.addBook(book);
-        redirectAttributes.addFlashAttribute("savedBook", savedBook);
+        /*Book savedBook = bookService.addBook(book);*/
+        initData.add(book);
+        
+        redirectAttributes.addFlashAttribute("savedBook", book);
         redirectAttributes.addFlashAttribute("addBookSuccess", true);
         return redirectView;
-    }*/
+    }
 	
 	@GetMapping("/viewBooks")
     public String viewBooks(Model model) {
-		List<BookData> initData = new ArrayList<>();
-        initData.add( new BookData("ISBN-1", "Book 1", "Book 1 Author"));
-        initData.add(new BookData("ISBN-2", "Book 2", "Book 2 Author"));
-        initData.add(new BookData("ISBN-3", "Book 3", "Book 3 Author"));
-        
+       
         model.addAttribute("books", initData);
         return "view-books";
     }
