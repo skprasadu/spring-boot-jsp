@@ -29,12 +29,14 @@ public class BookController {
 	    initData.add(new BookData("ISBN-3", "Book 3", "Book 3 Author"));	
 	}
 
+	//To render the form for the book
     @GetMapping("/addBook")
     public String addBookView(Model model) {
         model.addAttribute("book", new BookData());
         return "add-book";
     }
 
+    //This one was called when you POST from a form tag
     @PostMapping("/addBook")
     public RedirectView addBook(@ModelAttribute("book") BookData book, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("/book/addBook", true);
